@@ -1,0 +1,43 @@
+{
+  "name": "gulp-fontmin",
+  "version": "0.1.0",
+  "description": "Minify TTF font to SVG, EOT, WOFF",
+  "license": "MIT",
+  "repository": "ecomfe/gulp-fontmin",
+  "author": {
+    "name": "junmer",
+    "email": "junmer@foxmail.com"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "mocha --timeout 50000"
+  },
+  "files": [
+    "index.js"
+  ],
+  "keywords": [
+    "gulpplugin",
+    "fontmin",
+    "font",
+    "minify",
+    "minifier",
+    "compress",
+    "ttf",
+    "woff",
+    "eot",
+    "svg"
+  ],
+  "dependencies": {
+    "chalk": "^1.0.0",
+    "gulp-util": "^3.0.0",
+    "fontmin": "^0.4.0",
+    "object-assign": "^2.0.0",
+    "pretty-bytes": "^1.0.1",
+    "through2-concurrent": "^0.3.0"
+  },
+  "devDependencies": {
+    "mocha": "*"
+  }
+}
