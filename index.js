@@ -32,7 +32,8 @@ module.exports = function (opts) {
         var savedMsg = 'saved ' + prettyBytes(saved) + ' - ' + percent.toFixed(1).replace(/\.0$/, '') + '%';
         var msg = saved > 0 ? savedMsg : 'already optimized';
 
-        var optimizedType = path.extname(optimizedFile.path).toLowerCase();
+        var optimizedType = path.extname(optimizedFile.path).toLowerCase()
+            || path.extname(originalFile.path).toLowerCase();
 
         if (verbose) {
             msg = chalk.green('✔ ') + originalFile.relative + ' -> ' + optimizedType + chalk.gray(' (' + msg + ')');
@@ -98,12 +99,15 @@ module.exports = function (opts) {
                 return;
             }
 
+            var ttfFileName = path.basename(file.path, '.ttf');
+
             files.forEach(function (optimizedFile, index) {
 
                 if (!index) {
                     file.contents = optimizedFile.contents;
                 }
                 else {
+                    optimizedFile.path = ttfFileName + path.extname(optimizedFile.path);
                     fileStream.push(optimizedFile);
                 }
 
