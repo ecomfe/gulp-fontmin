@@ -7,23 +7,36 @@
 
 'use strict';
 var fs = require('fs');
+var path = require('path');
 var assert = require('assert');
 var gutil = require('gulp-util');
 var fontmin = require('./');
-var testSize;
+
+function isExt(file, ext) {
+    return ext.split(',').indexOf(path.extname(file.path).substr(1)) > -1;
+}
 
 it('should minify ttf', function (cb) {
     this.timeout(40000);
 
     var stream = fontmin({
-        text: '1'
+        text: '你好世界'
     });
 
-    stream.once('data', function (file) {
-        testSize = file.contents.length;
-        console.log(fs.statSync('fixture.ttf').size, file.contents.length);
-        assert(file.contents.length < fs.statSync('fixture.ttf').size);
-        fs.writeFileSync('fixture.svg', file.contents);
+    stream.on('data', function (file) {
+
+        if (isExt(file, 'ttf')) {
+            assert(file.contents.length < fs.statSync('fixture.ttf').size);
+        }
+
+        fs.writeFileSync(
+            file.path.replace('fixture', 'output/fixture'),
+            file.contents,
+            {
+                encoding: isExt(file, 'svg,css') ? 'utf-8' : 'binary'
+            }
+        );
+
     });
 
     stream.on('end', cb);

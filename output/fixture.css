@@ -1,0 +1,14 @@
+@font-face {
+    font-family: "fixture";
+    src: url("fixture.eot"); /* IE9 */
+    src: url("fixture.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */
+    
+    url("fixture.woff") format("woff"), /* chrome、firefox */
+    url("fixture.ttf") format("truetype"), /* chrome、firefox、opera、Safari, Android, iOS 4.2+ */
+    
+    url("fixture.svg#fixture") format("svg"); /* iOS 4.1- */
+    font-style: normal;
+    font-weight: normal;
+}
+
+

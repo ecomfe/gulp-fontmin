@@ -15,6 +15,15 @@ var chalk = require('chalk');
 var Fontmin = require('fontmin');
 
 
+function rename(opts) {
+    opts = opts || {};
+
+    return through.obj(function (file, enc, cb) {
+        file.path = opts.path;
+        cb(null, file);
+    });
+}
+
 module.exports = function (opts) {
     opts = assign({
         // TODO: remove this when gulp get's a real logger with levels
@@ -74,18 +83,16 @@ module.exports = function (opts) {
 
         var fontmin = new Fontmin()
             .src(file.contents)
+            .use(rename({
+                path: file.path
+            }))
             .use(Fontmin.glyph({
                 text: text
             }))
-            .use(Fontmin.ttf2eot({
-                clone: true
-            }))
-            .use(Fontmin.ttf2woff({
-                clone: true
-            }))
-            .use(Fontmin.ttf2svg({
-                clone: true
-            }));
+            .use(Fontmin.ttf2eot())
+            .use(Fontmin.ttf2woff())
+            .use(Fontmin.ttf2svg())
+            .use(Fontmin.css());
 
         if (opts.use) {
             opts.use.forEach(fontmin.use.bind(fontmin));
@@ -93,21 +100,25 @@ module.exports = function (opts) {
 
         var fileStream = this;
 
+        var ttfBaseName = path.basename(file.path, '.ttf');
+        var ttfDir = path.dirname(file.path);
+
         fontmin.run(function (err, files) {
             if (err) {
                 cb(new gutil.PluginError('gulp-fontmin:', err, {fileName: file.path}));
                 return;
             }
 
-            var ttfFileName = path.basename(file.path, '.ttf');
-
             files.forEach(function (optimizedFile, index) {
 
-                if (!index) {
+                if (index === 0) {  // ttf
                     file.contents = optimizedFile.contents;
                 }
-                else {
-                    optimizedFile.path = ttfFileName + path.extname(optimizedFile.path);
+                else {              // other
+                    optimizedFile.path = path.resolve(
+                        ttfDir,
+                        ttfBaseName + path.extname(optimizedFile.path)
+                    );
                     fileStream.push(optimizedFile);
                 }
 
