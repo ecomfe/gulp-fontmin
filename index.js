@@ -100,14 +100,13 @@ module.exports = function (opts) {
 
         var fileStream = this;
 
-        var ttfBaseName = path.basename(file.path, '.ttf');
-        var ttfDir = path.dirname(file.path);
-
         fontmin.run(function (err, files) {
             if (err) {
                 cb(new gutil.PluginError('gulp-fontmin:', err, {fileName: file.path}));
                 return;
             }
+
+            var cloneFile;
 
             files.forEach(function (optimizedFile, index) {
 
@@ -115,11 +114,10 @@ module.exports = function (opts) {
                     file.contents = optimizedFile.contents;
                 }
                 else {              // other
-                    optimizedFile.path = path.resolve(
-                        ttfDir,
-                        ttfBaseName + path.extname(optimizedFile.path)
-                    );
-                    fileStream.push(optimizedFile);
+                    cloneFile = file.clone();
+                    cloneFile.path = cloneFile.path.replace(/.ttf$/, path.extname(optimizedFile.path));
+                    cloneFile.contents = optimizedFile.contents;
+                    fileStream.push(cloneFile);
                 }
 
                 printMsg(file, optimizedFile, opts.verbose);

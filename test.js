@@ -42,7 +42,7 @@ it('should minify ttf', function (cb) {
     stream.on('end', cb);
 
     stream.write(new gutil.File({
-        path: __dirname + '/fixture.ttf',
+        path: path.join(__dirname, '/fixture.ttf'),
         contents: fs.readFileSync('fixture.ttf')
     }));
 
@@ -59,7 +59,7 @@ it('should skip unsupported fonts', function (cb) {
     stream.on('end', cb);
 
     stream.write(new gutil.File({
-        path: __dirname + '/fixture.bmp'
+        path: path.join(__dirname, '/fixture.bmp')
     }));
 
     stream.end();
