@@ -14,7 +14,12 @@ var prettyBytes = require('pretty-bytes');
 var chalk = require('chalk');
 var Fontmin = require('fontmin');
 
-
+/**
+ * rename
+ *
+ * @param  {Object} opts opts
+ * @return {stream.Transform}      rename transform
+ */
 function rename(opts) {
     opts = opts || {};
 
@@ -24,6 +29,12 @@ function rename(opts) {
     });
 }
 
+/**
+ * fontmin transform
+ *
+ * @param  {Object} opts opts
+ * @return {stream.Transform}      fontmin transform
+ */
 module.exports = function (opts) {
     opts = assign({
         // TODO: remove this when gulp get's a real logger with levels
@@ -41,8 +52,7 @@ module.exports = function (opts) {
         var savedMsg = 'saved ' + prettyBytes(saved) + ' - ' + percent.toFixed(1).replace(/\.0$/, '') + '%';
         var msg = saved > 0 ? savedMsg : 'already optimized';
 
-        var optimizedType = path.extname(optimizedFile.path).toLowerCase()
-            || path.extname(originalFile.path).toLowerCase();
+        var optimizedType = (path.extname(optimizedFile.path) || path.extname(originalFile.path)).toLowerCase();
 
         if (verbose) {
             msg = chalk.green('✔ ') + originalFile.relative + ' -> ' + optimizedType + chalk.gray(' (' + msg + ')');
@@ -73,10 +83,6 @@ module.exports = function (opts) {
 
         var text = opts.text || '';
 
-        if (file.fontminText) {
-            text += file.fontminText;
-        }
-
         if (text && opts.chineseOnly) {
             text = text.replace(/[^\u4e00-\u9fa5]/g, '');
         }
@@ -106,7 +112,7 @@ module.exports = function (opts) {
                 return;
             }
 
-            var cloneFile;
+            var gulpFile;
 
             files.forEach(function (optimizedFile, index) {
 
@@ -114,10 +120,10 @@ module.exports = function (opts) {
                     file.contents = optimizedFile.contents;
                 }
                 else {              // other
-                    cloneFile = file.clone();
-                    cloneFile.path = cloneFile.path.replace(/.ttf$/, path.extname(optimizedFile.path));
-                    cloneFile.contents = optimizedFile.contents;
-                    fileStream.push(cloneFile);
+                    gulpFile = file.clone();
+                    gulpFile.path = gulpFile.path.replace(/.ttf$/, path.extname(optimizedFile.path));
+                    gulpFile.contents = optimizedFile.contents;
+                    fileStream.push(gulpFile);
                 }
 
                 printMsg(file, optimizedFile, opts.verbose);

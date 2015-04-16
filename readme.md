@@ -59,32 +59,38 @@ Options:
 
 ```js
 
-var through = require('through2');
-var concat = require('gulp-concat');
-
-function fontminText() {
-    return through.obj(function (file, enc, cb) {
-        function getText() {
-            return through.obj(function (html, htmlEnc, htmlCb) {
-                file.fontminText = html;
-                htmlCb();
-                cb();
-            });
-        }
-        gulp.src('src/*.html')
-            .pipe(concat('all.html'))
-            .pipe(getText());
-    });
+function minifyFont(text, cb) {
+    gulp
+        .src('src/font/*.ttf')
+        .pipe(fontmin({
+            text: text
+        }))
+        .pipe(gulp.dest('dest/font'))
+        .on('end', cb);
 }
 
-gulp.task('default', function () {
-    return gulp.src('src/fonts/*.ttf')
-        .pipe(fontminText())
-        .pipe(fontmin())
-        .pipe(gulp.dest('dist/fonts'));
-});
+gulp.task('fonts', function(cb) {
 
+    var buffers = [];
+
+    gulp
+        .src('index.html')
+        .on('data', function(file) {
+            buffers.push(file.contents);
+        })
+        .on('end', function() {
+            var text = Buffer.concat(buffers).toString('utf-8');
+            minifyFont(text, cb);
+        });
+
+});
 ```
+
+## Related
+
+- [gulp-fontmin-demo](https://github.com/junmer/gulp-fontmin-demo)
+- [fontmin](https://github.com/ecomfe/fontmin)
+- [fontmin-app](https://github.com/ecomfe/fontmin-app)
 
 ## License
 
