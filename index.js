@@ -98,7 +98,7 @@ module.exports = function (opts) {
             .use(Fontmin.ttf2eot())
             .use(Fontmin.ttf2woff())
             .use(Fontmin.ttf2svg())
-            .use(Fontmin.css());
+            .use(Fontmin.css(opts));
 
         if (opts.use) {
             opts.use.forEach(fontmin.use.bind(fontmin));
