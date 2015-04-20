@@ -16,17 +16,26 @@ function isExt(file, ext) {
     return ext.split(',').indexOf(path.extname(file.path).substr(1)) > -1;
 }
 
-it('should minify ttf', function (cb) {
+it('should minify ttf, css should have path', function (cb) {
     this.timeout(40000);
 
     var stream = fontmin({
-        text: '你好世界'
+        text: '你好世界',
+        fontPath: 'path/foo'
     });
 
     stream.on('data', function (file) {
 
         if (isExt(file, 'ttf')) {
             assert(file.contents.length < fs.statSync('fixture.ttf').size);
+        }
+
+        if (isExt(file, 'css')) {
+            assert(
+                /path\/foo/.test(
+                    file.contents.toString('utf-8')
+                )
+            );
         }
 
         fs.writeFileSync(
@@ -64,35 +73,4 @@ it('should skip unsupported fonts', function (cb) {
 
     stream.end();
 });
-
-it('css should have path', function (cb) {
-    this.timeout(40000);
-
-    var stream = fontmin({
-        text: '你好世界',
-        fontPath: 'path/foo'
-    });
-
-    stream.on('data', function (file) {
-
-        if (isExt(file, 'css')) {
-            assert(
-                /path\/foo/.test(
-                    file.contents.toString('utf-8')
-                )
-            );
-        }
-
-    });
-
-    stream.on('end', cb);
-
-    stream.write(new gutil.File({
-        path: path.join(__dirname, '/fixture.ttf'),
-        contents: fs.readFileSync('fixture.ttf')
-    }));
-
-    stream.end();
-});
-
 
