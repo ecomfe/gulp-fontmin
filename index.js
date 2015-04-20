@@ -87,14 +87,14 @@ module.exports = function (opts) {
             text = text.replace(/[^\u4e00-\u9fa5]/g, '');
         }
 
+        opts.text = text;
+
         var fontmin = new Fontmin()
             .src(file.contents)
             .use(rename({
                 path: file.path
             }))
-            .use(Fontmin.glyph({
-                text: text
-            }))
+            .use(Fontmin.glyph(opts))
             .use(Fontmin.ttf2eot())
             .use(Fontmin.ttf2woff())
             .use(Fontmin.ttf2svg())
