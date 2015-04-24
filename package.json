@@ -31,7 +31,7 @@
   ],
   "dependencies": {
     "chalk": "^1.0.0",
-    "fontmin": "^0.7.2",
+    "fontmin": "^0.7.3",
     "gulp-util": "^3.0.0",
     "object-assign": "^2.0.0",
     "pretty-bytes": "^1.0.1",

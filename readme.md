@@ -50,8 +50,9 @@ gulp.task('default', function () {
 Options:
 
 * `text`: A string corresponding glyphs of ttf
-* `onlyChinese`: {Boolean} keep chinese only, exclude Latin, number and symbol. Default = false
+* `onlyChinese`: {boolean} keep chinese only, exclude Latin, number and symbol. Default = false
 * `fontPath`: {string=} location of font file.
+* `hinting`: {boolean=} keep hint info, defaults true.
 
 
 ## Practice
