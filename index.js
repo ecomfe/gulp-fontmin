@@ -136,6 +136,9 @@ module.exports = function (opts) {
         });
 
     }, function (cb) {
+        if(opts.quiet) {
+            cb();
+        }
         var msg = 'Minified ' + totalFiles + ' ';
 
         msg += totalFiles === 1 ? 'font' : 'fonts';
