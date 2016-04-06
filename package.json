@@ -31,10 +31,10 @@
   ],
   "dependencies": {
     "chalk": "^1.0.0",
-    "fontmin": "^0.9.1",
+    "fontmin": "^0.9.3",
     "gulp-util": "^3.0.0",
-    "object-assign": "^2.0.0",
-    "pretty-bytes": "^1.0.1",
+    "object-assign": "^4.0.1",
+    "pretty-bytes": "^3.0.1",
     "through2-concurrent": "^1.0.0"
   },
   "devDependencies": {
