@@ -137,7 +137,7 @@ module.exports = function (opts) {
 
     }, function (cb) {
         if(opts.quiet) {
-            cb();
+            return cb();
         }
         var msg = 'Minified ' + totalFiles + ' ';
 
