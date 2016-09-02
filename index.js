@@ -81,27 +81,28 @@ module.exports = function (opts) {
             return;
         }
 
-        var text = opts.text || '';
-
-        if (text && opts.chineseOnly) {
-            text = text.replace(/[^\u4e00-\u9fa5]/g, '');
-        }
-
-        opts.text = text;
-
         var fontmin = new Fontmin()
             .src(file.contents)
             .use(rename({
                 path: file.path
-            }))
-            .use(Fontmin.glyph(opts))
-            .use(Fontmin.ttf2eot())
-            .use(Fontmin.ttf2woff())
-            .use(Fontmin.ttf2svg())
-            .use(Fontmin.css(opts));
+            }));
 
         if (opts.use) {
             opts.use.forEach(fontmin.use.bind(fontmin));
+        } else {
+            var text = opts.text || '';
+
+            if (text && opts.chineseOnly) {
+                text = text.replace(/[^\u4e00-\u9fa5]/g, '');
+            }
+
+            opts.text = text;
+
+            fontmin.use(Fontmin.glyph(opts))
+                .use(Fontmin.ttf2eot())
+                .use(Fontmin.ttf2woff())
+                .use(Fontmin.ttf2svg())
+                .use(Fontmin.css(opts));
         }
 
         var fileStream = this;
