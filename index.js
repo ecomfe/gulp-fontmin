@@ -97,6 +97,7 @@ module.exports = function (opts) {
             .use(Fontmin.glyph(opts))
             .use(Fontmin.ttf2eot())
             .use(Fontmin.ttf2woff())
+            .use(Fontmin.ttf2woff2())
             .use(Fontmin.ttf2svg())
             .use(Fontmin.css(opts));
 
